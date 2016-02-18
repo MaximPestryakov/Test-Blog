@@ -1,6 +1,5 @@
 # Test Blog
-My first blog created on Django\
-Live version: http://54.201.101.220
+My first blog created on Django. Live version: http://54.201.101.220
 
 ### Tech
 List of used technologies:
