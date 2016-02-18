@@ -1,0 +1,4 @@
+nohup.out
+*.pyc
+*.sqlite3
+migrations/

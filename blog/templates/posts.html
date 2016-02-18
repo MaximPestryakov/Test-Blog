@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+
+<head>
+  <link href="/static/css/normalize-3.0.3.min.css" rel="stylesheet">
+  <link href="/static/css/bootstrap-3.3.6.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <script src="/static/js/jquery-2.2.0.min.js"></script>
+  <script src="/static/js/bootstrap-3.3.6.min.js"></script>
+  <script src="/static/js/script.js"></script>
+  <script src="/static/js/jquery.cookie-1.4.1.min.js"></script>
+  <title>Test Blog</title>
+  {% csrf_token %}
+</head>
+
+<body>
+  <div class="container">
+    <div class="header clearfix">
+      <h3 class="text-muted">{{ title }}</h3></div>
+    <div class="jumbotron">
+      <h1>Добро пожаловать!</h1>
+      <p class="lead">Это тестовый блог. Ты можешь написать сюда абсолютно всё, что угодно!</p>
+      <p>
+        <a class="btn btn-lg btn-primary" role="button" data-toggle="modal" data-target="#new-post">Оставить запись</a> {% if user.is_active %}
+        <a class="btn btn-lg btn-primary" role="button" onclick="logout()">Выйти</a> {% else %}
+        <a class="btn btn-lg btn-primary" role="button" data-toggle="modal" data-target="#login">Войти</a> {% endif %}
+      </p>
+    </div>
+    <div class="modal fade" id="new-post" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Новая запись</h4>
+          </div>
+          <div class="modal-body">
+            <p><input id="post-title" type="text" class="form-control" placeholder="Название"></p>
+            <p><textarea id="post-text" class="form-control" rows="20" placeholder="Запись" style="resize:vertical"></textarea></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Отменить</button>
+            <button onclick="send_post()" type="button" class="btn btn-primary">Опубликовать запись</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="login" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Форма входа</h4>
+          </div>
+          <div class="modal-body">
+            <p><input id="username" type="text" class="form-control" placeholder="Логин"></p>
+            <p><input id="password" type="password" class="form-control" placeholder="Пароль"></p>
+          </div>
+          <div class="modal-footer">
+            <button onclick="login()" type="button" class="btn btn-primary">Войти</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      {% for post in posts %}
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg3">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{ post.title }}</h3>
+          </div>
+          <div class="panel-body">
+            <p>{{ post.text|truncatechars:170 }}</p>
+            <p><span class="glyphicon glyphicon-user"> <a href="#">{% if post.author.id == 2 %}Гость{% else %}{{ post.author }}{% endif %}</a></p>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-post" onclick="get_post({{ post.pk }})">Читать полностью</button>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+      <div class="modal fade" id="modal-post" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="model-post-title"></h4>
+          </div>
+          <div class="modal-body" id="model-post-text"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+
+</html>
